@@ -14,28 +14,29 @@ namespace BridgeScoring.Tests
         [TestMethod()]
         public void GetScoreTest()
         {
-            Assert.AreEqual(TestScore(2, BridgeCalculation.Couleurs.Trefle, BridgeCalculation.DoubleMode.NonDbl, false, 2), 40);
-            Assert.AreEqual(TestScore(2, BridgeCalculation.Couleurs.Trefle, BridgeCalculation.DoubleMode.Dbl, false, 2), 40);
-            Assert.AreEqual(TestScore(2, BridgeCalculation.Couleurs.Trefle, BridgeCalculation.DoubleMode.Dbl, false, 2), 40);
-            Assert.AreEqual(TestScore(2, BridgeCalculation.Couleurs.Trefle, BridgeCalculation.DoubleMode.Dbl, false, 2), 40);
-            Assert.AreEqual(TestScore(2, BridgeCalculation.Couleurs.Trefle, BridgeCalculation.DoubleMode.Dbl, false, 2), 40);
-            Assert.AreEqual(TestScore(2, BridgeCalculation.Couleurs.Trefle, BridgeCalculation.DoubleMode.Dbl, false, 2), 40);
+            Team team = null;
+
+            team = TestScore(2, Contract.Couleurs.Trefle, Contract.Doubled.NonDbl, false, 2);
+            Assert.IsTrue((team.Score_BelowTheLine + team.Score) == 40);
         }
 
-        private int TestScore(int contratLevee, BridgeCalculation.Couleurs couleur, BridgeCalculation.DoubleMode mode, bool isVul, int leveeFaites)
+        private Team TestScore(int contractTricks, Contract.Couleurs couleur, Contract.Doubled doubled, bool isVul, int tricksMade)
         {
-            BridgeCalculation bc = new BridgeCalculation()
+            Team ns = new Team();
+            ns.IsVulnerable = isVul;
+
+            Team we = new Team();
+            BridgeCalculation bc = new BridgeCalculation(true)
             {
-                ContratLevee = contratLevee,
-                Couleur = couleur,
-                Double = mode,
-                IsVulnerable = isVul,
-                LeveeFaites = leveeFaites,
+                Team_NS = ns,
+                Team_WE = we
             };
 
-            int score = bc.GetScore(BridgeCalculation.ScoreType.ContractPoint);
+            Contract c1 = new Contract(contractTricks, couleur, doubled);
 
-            return score;
+            bc.CalculateContract(c1, ns, tricksMade);
+
+            return ns;
         }
     }
 }

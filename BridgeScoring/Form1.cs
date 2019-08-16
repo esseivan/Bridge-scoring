@@ -66,26 +66,7 @@ namespace BridgeScoring
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            BridgeCalculation.Couleurs couleur = (BridgeCalculation.Couleurs)cboxCCouleur.SelectedIndex;
-            BridgeCalculation.DoubleMode doubleMode = (BridgeCalculation.DoubleMode)grp_dbl.GetSelectedIndex();
-            int leveeFaites = cboxTIndex.SelectedIndex;
 
-            BridgeCalculation bc = new BridgeCalculation()
-            {
-                ContratLevee = (int)cboxCIndex.SelectedItem,
-                Couleur = couleur,
-                LeveeFaites = leveeFaites,
-                Double = doubleMode,
-                IsVulnerable = chbV.Checked,
-            };
-
-            var scores = bc.GetScores();
-            tbContract.Text = bc.GetScore(scores, BridgeCalculation.ScoreType.ContractPoint).ToString();
-            tbOvertrick.Text = bc.GetScore(scores, BridgeCalculation.ScoreType.OverTricks).ToString();
-            tbUndertrick.Text = bc.GetScore(scores, BridgeCalculation.ScoreType.UnderTricks).ToString();
-            tbDoubled.Text = bc.GetScore(scores, BridgeCalculation.ScoreType.Doubled).ToString();
-            tbSlam.Text = bc.GetScore(scores, BridgeCalculation.ScoreType.Slam).ToString();
-            tbTotal.Text = bc.GetScore(scores, BridgeCalculation.ScoreType.ALL).ToString();
         }
     }
 }

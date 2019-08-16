@@ -9,88 +9,180 @@ using System.Threading.Tasks;
 namespace BridgeScoring
 {
     /// <summary>
-    /// Rubber Bridge
+    /// Duplicate Bridge
     /// </summary>
     public class BridgeCalculation
     {
-        public Team Team1 { get; set; } = null;
-        public Team Team2 { get; set; } = null;
+        public Team Team_NS { get; set; } = null;
+        public Team Team_WE { get; set; } = null;
 
-        public enum ScoreType
+        public bool isRubberBridgeMode { get; set; } = false;
+
+        public BridgeCalculation(bool isRubberBridgeMode)
         {
-            ALL,
-
-            ContractPoint,
-            OverTricks,
-            UnderTricks,
-            Doubled,
-            Slam,
+            this.isRubberBridgeMode = isRubberBridgeMode;
         }
 
-        public void AddContract(Contract contract, Team team, int tricksMade)
+        private Team GetDefendingTeam(Team declaringTeam)
         {
-
+            if (Team_NS == declaringTeam)
+                return Team_WE;
+            return Team_NS;
         }
 
-        private void CalculateContract(Contract contract, Team team, int tricksMade)
-        {
-            Dictionary<ScoreType, int> scores = new Dictionary<ScoreType, int>();
-            int currentscore;
 
-            // Contract points
-            currentscore = 0;
-            if (tricksMade >= contract.Tricks)
+        public void NewGame()
+        {
+            Team_NS.Score = 0;
+            Team_NS.Score_BelowTheLine = 0;
+            Team_NS.IsVulnerable = false;
+
+            Team_WE.Score = 0;
+            Team_WE.Score_BelowTheLine = 0;
+            Team_WE.IsVulnerable = false;
+        }
+
+        public int CalculateContract(Contract contract, Team declaringTeam, int tricksMade)
+        {
+            Team defendingTeam = GetDefendingTeam(declaringTeam);
+
+            /*** Contract points ***/
+            // Add contract points below the line
+            int contractPoints = CalculateContractPoints(contract, declaringTeam, tricksMade);
+            declaringTeam.Score_BelowTheLine += contractPoints;
+            contract.matchWon = (declaringTeam.Score_BelowTheLine >= 100);
+
+            /*** Contract made points ***/
+            if (contract.matchWon)
             {
-                currentscore = GetContractScore(Couleur, ContratLevee, false);
+                // Below line points pass above line
+                declaringTeam.Score += declaringTeam.Score_BelowTheLine;
+                declaringTeam.Score_BelowTheLine = 0;
+                declaringTeam.IsVulnerable = true;
+            }
 
-                if (Double == DoubleMode.Dbl)
+            /*** Game or Part-Game ***/
+            // Duplicate bridge only
+            if (!isRubberBridgeMode)
+            {
+                if (contractPoints >= 100)
+                {
+                    declaringTeam.Score += (declaringTeam.IsVulnerable ? 500 : 300);
+                } else
+                {
+                    declaringTeam.Score += 50;
+                }
+            }
+
+            /*** Honor points ***/
+            // Rubber bridge only
+            // Not implemented
+            //if (isRubberBridgeMode)
+            //{
+                // 150 points for 5 honors (as, ..., ten)
+                // 100 points for 4 honors (as, ..., ten minus 1)
+            //}
+
+            /*** Overtrick points ***/
+            // Add overtrick points above the line
+            declaringTeam.Score += CalculateOverTricksPoints(contract, declaringTeam, tricksMade);
+
+            /*** Undertrick points ***/
+            // Add penality points to opponent above the line
+            defendingTeam.Score += CalculateUnderTricksPoints(contract, declaringTeam, tricksMade);
+
+            /*** Doubled points ***/
+            declaringTeam.Score += CalculateDoubledContractPoints(contract, declaringTeam, tricksMade);
+
+            /*** Slam points ***/
+            declaringTeam.Score += CalculateSlamPoints(contract, declaringTeam, tricksMade);
+
+            return declaringTeam.Score_BelowTheLine;
+        }
+
+        private int GetContractScore(Contract contract, Team team, int count, bool isFirst)
+        {
+            switch (contract.couleur)
+            {
+                case Contract.Couleurs.Trefle:
+                case Contract.Couleurs.Carreau:
+                    return count * 20;
+                case Contract.Couleurs.Coeur:
+                case Contract.Couleurs.Pique:
+                    return count * 30;
+                case Contract.Couleurs.SansAttout:
+                    return count * 30 + (isFirst ? 10 : 0);
+                default:
+                    break;
+            }
+
+            return -1;
+        }
+
+        public int CalculateContractPoints(Contract contract, Team declaringTeam, int tricksMade)
+        {
+            int currentscore = 0;
+            // if enough tricks made
+            if (tricksMade >= contract.tricks)
+            {
+                contract.contractMade = true;
+                currentscore = GetContractScore(contract, declaringTeam, tricksMade, true);
+
+                if (contract.doubled == Contract.Doubled.Dbl)
                     currentscore *= 2;
-                else if (Double == DoubleMode.ReDbl)
+                else if (contract.doubled == Contract.Doubled.ReDbl)
                     currentscore *= 4;
             }
-            scores.Add(ScoreType.ContractPoint, currentscore);
-            if (scores[ScoreType.ContractPoint] >= 100)
-                ContractMade = true;
             else
-                ContractMade = false;
+                contract.contractMade = false;
 
-            // Overtricks
-            currentscore = 0;
-            if (tricksMade > ContratLevee)
+            return currentscore;
+        }
+
+        public int CalculateOverTricksPoints(Contract contract, Team declaringTeam, int tricksMade)
+        {
+            int currentscore = 0;
+            // If more tricks than contract tricks
+            if (tricksMade > contract.tricks)
             {
-                if (Double == DoubleMode.NonDbl)
+                if (contract.doubled == Contract.Doubled.NonDbl)
                 {
-                    currentscore = GetContractScore(Couleur, tricksMade - ContratLevee, true);
+                    currentscore = GetContractScore(contract, declaringTeam, tricksMade - contract.tricks, false);
                 }
                 else
                 {
-                    currentscore = (tricksMade - ContratLevee) * 100;
+                    currentscore = (tricksMade - contract.tricks) * 100;
 
-                    if (Double == DoubleMode.Dbl)
+                    if (contract.doubled == Contract.Doubled.Dbl)
                         currentscore *= 2;
                     else
                         currentscore *= 4;
-                    if (IsVulnerable)
-                        currentscore *= 2;
 
+                    if (declaringTeam.IsVulnerable)
+                        currentscore *= 2;
                 }
             }
-            scores.Add(ScoreType.OverTricks, currentscore);
+            return currentscore;
+        }
 
-            // Undertricks
-            currentscore = 0;
-            if (tricksMade < ContratLevee)
+        public int CalculateUnderTricksPoints(Contract contract, Team declaringTeam, int tricksMade)
+        {
+            int currentscore = 0;
+            // If tricks made below contract tricks
+            if (tricksMade < contract.tricks)
             {
-                int counter = (ContratLevee - tricksMade);
+                int counter = (contract.tricks - tricksMade);
                 int multiplier = 50;
 
-                if (IsVulnerable)
+                if (declaringTeam.IsVulnerable)
                     multiplier *= 2;
-                if (Double == DoubleMode.Dbl)
+
+                if (contract.doubled == Contract.Doubled.Dbl)
                     multiplier *= 2;
-                else if (Double == DoubleMode.ReDbl)
+                else if (contract.doubled == Contract.Doubled.ReDbl)
                     multiplier *= 4;
-                if (Double == DoubleMode.NonDbl)
+
+                if (contract.doubled == Contract.Doubled.NonDbl)
                 {
                     currentscore = multiplier * counter;
                 }
@@ -100,9 +192,9 @@ namespace BridgeScoring
                     {
                         currentscore += multiplier;
 
-                        if ((counter == 0) || (counter == 1 && !IsVulnerable))
+                        if ((counter == 0) || (counter == 1 && !declaringTeam.IsVulnerable))
                         {
-                            if (Double == DoubleMode.Dbl)
+                            if (contract.doubled == Contract.Doubled.Dbl)
                                 multiplier += 100;
                             else
                                 multiplier += 200;
@@ -112,69 +204,52 @@ namespace BridgeScoring
                     }
                 }
             }
-            scores.Add(ScoreType.UnderTricks, currentscore);
 
-            // Doubled
-            currentscore = 0;
-            if (ContractMade)
+            return currentscore;
+        }
+
+        public int CalculateDoubledContractPoints(Contract contract, Team declaringTeam, int tricksMade)
+        {
+            int currentscore = 0;
+            if (contract.contractMade)
             {
-                if (Double == DoubleMode.Dbl)
+                if (contract.doubled == Contract.Doubled.Dbl)
                     currentscore = 50;
-                else if (Double == DoubleMode.ReDbl)
+                else if (contract.doubled == Contract.Doubled.ReDbl)
                     currentscore = 100;
             }
-            scores.Add(ScoreType.Doubled, currentscore);
+            return currentscore;
+        }
 
-            // Slam
-            currentscore = 0;
-            if (ContractMade)
+        public int CalculateSlamPoints(Contract contract, Team declaringTeam, int tricksMade)
+        {
+            int currentscore = 0;
+            if (contract.contractMade)
             {
-                if (ContratLevee == 6)
+                if (contract.tricks == 6)
                 {
-                    if (IsVulnerable)
+                    if (declaringTeam.IsVulnerable)
                         currentscore = 750;
                     else
                         currentscore = 500;
                 }
-                else if (ContratLevee == 7)
+                else if (contract.tricks == 7)
                 {
-                    if (IsVulnerable)
+                    if (declaringTeam.IsVulnerable)
                         currentscore = 1500;
                     else
                         currentscore = 1000;
                 }
             }
-            scores.Add(ScoreType.Slam, currentscore);
-
+            return currentscore;
         }
 
-        public int GetScore(Dictionary<ScoreType, int> scores, ScoreType scoreType)
-        {
-            switch (scoreType)
-            {
-                case ScoreType.ALL:
-                    return scores.Sum((kv) => kv.Value);
-                case ScoreType.ContractPoint:
-                case ScoreType.OverTricks:
-                case ScoreType.UnderTricks:
-                case ScoreType.Doubled:
-                case ScoreType.Slam:
-                    return scores[scoreType];
-                default:
-                    break;
-            }
 
-            return -1;
-        }
-
-        public int GetScore(ScoreType scoreType)
-        {
-            return GetScore(GetScores(), scoreType);
-        }
     }
 
     public class Team
     {
+        public int Score_BelowTheLine { get; set; } = 0;
         public int Score { get; set; } = 0;
         public bool IsVulnerable { get; set; } = false;
 
@@ -182,11 +257,15 @@ namespace BridgeScoring
 
     public class Contract
     {
-        public int Tricks { get; private set; } = 1;
+        public int tricks { get; private set; } = 1;
 
-        public Couleurs couleur = Couleurs.Trefle;
+        public bool matchWon { get; set; } = false;
 
-        public Doubled doubled = Doubled.NonDbl;
+        public bool contractMade { get; set; } = false;
+
+        public Couleurs couleur { get; set; } = Couleurs.Trefle;
+
+        public Doubled doubled { get; set; } = Doubled.NonDbl;
 
         #region Enums
 
@@ -210,18 +289,19 @@ namespace BridgeScoring
 
         #region Constructors
 
-        public Contract() {
+        public Contract()
+        {
         }
 
-        public Contract(int Tricks, Couleurs couleur)
+        public Contract(int tricks, Couleurs couleur)
         {
-            this.Tricks = Tricks;
+            this.tricks = tricks;
             this.couleur = couleur;
         }
 
-        public Contract(int Tricks, Couleurs couleur, Doubled doubled)
+        public Contract(int tricks, Couleurs couleur, Doubled doubled)
         {
-            this.Tricks = Tricks;
+            this.tricks = tricks;
             this.couleur = couleur;
             this.doubled = doubled;
         }
@@ -238,13 +318,13 @@ namespace BridgeScoring
             }
             else
             {
-                this.Tricks = Tricks;
+                this.tricks = Tricks;
             }
         }
 
         public int GetTricks()
         {
-            return this.Tricks;
+            return this.tricks;
         }
 
         public void SetCouleur(Couleurs couleur)
