@@ -13,6 +13,8 @@ namespace BridgeScoring
 {
     public partial class Form1 : Form
     {
+        BridgeCalculation bridgeCalculation;
+
         private CheckboxGrouped grp_dbl = new CheckboxGrouped()
         {
             AllowNoSelection = false,
@@ -26,8 +28,6 @@ namespace BridgeScoring
             MultipleSelection = false,
             DefaultActiveIndex = 0,
         };
-
-        private string[] couleurs = new string[] { "Trèfle", "Carreau", "Coeur", "Pique", "Sans-Atout" };
 
         public Form1()
         {
@@ -47,12 +47,14 @@ namespace BridgeScoring
             // Contrat
             cboxCIndex.Items.AddRange(new object[] { 1, 2, 3, 4, 5, 6, 7 });
             cboxCIndex.SelectedIndex = 0;
-            cboxCCouleur.Items.AddRange(couleurs);
+            cboxCCouleur.Items.AddRange(Enum.GetNames(typeof(Contract.Couleurs)));
             cboxCCouleur.SelectedIndex = 0;
 
             // Levees
-            cboxTIndex.Items.AddRange(new object[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 });
+            cboxTIndex.Items.AddRange(new object[] { "-6 (0)", "-5 (1)", "-4 (2)", "-3 (3)", "-2 (4)", "-1 (5)", "0 (6)", "+1 (7)", "+2 (8)", "+3 (9)", "+4 (10)", "+5 (11)", "+6 (12)", "+7 (13)" });
             cboxTIndex.SelectedIndex = 0;
+
+            bridgeCalculation = new BridgeCalculation(btnMode.Checked);
         }
 
         private void CheckBox_dbl_CheckedChanged(object sender, EventArgs e)
@@ -66,7 +68,35 @@ namespace BridgeScoring
 
         private void Button1_Click(object sender, EventArgs e)
         {
+            Contract contract = new Contract();
 
+            // Tricks
+            contract.SetTricks(cboxCIndex.SelectedIndex + 1);
+
+            // Couleur
+            contract.SetCouleur((Contract.Couleurs)Enum.Parse(typeof(Contract.Couleurs), cboxCCouleur.SelectedItem.ToString()));
+
+            // Doubled
+            contract.doubled = (Contract.Doubled)grp_dbl.GetSelectedIndex();
+
+            Dictionary<BridgeCalculation.ScoreType, int> scores = bridgeCalculation.CalculateContract(contract, chbV.Checked, cboxTIndex.SelectedIndex);
+
+            tbContract.Text = scores[BridgeCalculation.ScoreType.Contract].ToString();
+            tbOvertrick.Text = scores[BridgeCalculation.ScoreType.Overtrick].ToString();
+            tbUndertrick.Text = scores[BridgeCalculation.ScoreType.Undertrick].ToString();
+            tbDoubled.Text = scores[BridgeCalculation.ScoreType.Doubled].ToString();
+            tbSlam.Text = scores[BridgeCalculation.ScoreType.Slam].ToString();
+            tbPartGame.Text = scores[BridgeCalculation.ScoreType.PartGame].ToString();
+            tbTotalPrimes.Text = (scores[BridgeCalculation.ScoreType.All] - scores[BridgeCalculation.ScoreType.Contract]).ToString();
+            tbTotal.Text = (scores[BridgeCalculation.ScoreType.All]).ToString();
+        }
+
+        private void BtnMode_CheckedChanged(object sender, EventArgs e)
+        {
+            btnMode.Text = "Mode : " + (btnMode.Checked ? "Rubber" : "Duplicate");
+            bridgeCalculation = new BridgeCalculation(btnMode.Checked);
+
+            tbPartGame.Enabled = !btnMode.Checked;
         }
     }
 }

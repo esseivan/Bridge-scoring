@@ -12,31 +12,23 @@ namespace BridgeScoring.Tests
     public class BridgeCalculationTests
     {
         [TestMethod()]
-        public void GetScoreTest()
+        public void CalculateContractTest()
         {
-            Team team = null;
-
-            team = TestScore(2, Contract.Couleurs.Trefle, Contract.Doubled.NonDbl, false, 2);
-            Assert.IsTrue((team.Score_BelowTheLine + team.Score) == 40);
+            Dictionary<BridgeCalculation.ScoreType, int> scores = TestScore(1, Contract.Couleurs.Trefle, Contract.Doubled.NonDbl, false, 8);
+            Assert.IsTrue(scores[BridgeCalculation.ScoreType.All] == 40);
         }
 
-        private Team TestScore(int contractTricks, Contract.Couleurs couleur, Contract.Doubled doubled, bool isVul, int tricksMade)
+        private Dictionary<BridgeCalculation.ScoreType, int> TestScore(int contractTricks, Contract.Couleurs couleur, Contract.Doubled doubled, bool isVul, int tricksMade)
         {
-            Team ns = new Team();
-            ns.IsVulnerable = isVul;
+            bool IsVulnerable = isVul;
 
-            Team we = new Team();
-            BridgeCalculation bc = new BridgeCalculation(true)
-            {
-                Team_NS = ns,
-                Team_WE = we
-            };
+            BridgeCalculation bc = new BridgeCalculation(true);
 
             Contract c1 = new Contract(contractTricks, couleur, doubled);
 
-            bc.CalculateContract(c1, ns, tricksMade);
+            Dictionary<BridgeCalculation.ScoreType, int> scores = bc.CalculateContract(c1, isVul, tricksMade);
 
-            return ns;
+            return scores;
         }
     }
 }

@@ -39,19 +39,24 @@
             this.grpboxTrick = new System.Windows.Forms.GroupBox();
             this.cboxTIndex = new System.Windows.Forms.ComboBox();
             this.grpboxScore = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.tbContract = new System.Windows.Forms.TextBox();
-            this.tbOvertrick = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.tbUndertrick = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.tbDoubled = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.tbSlam = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.tbTotal = new System.Windows.Forms.TextBox();
+            this.tbTotalPrimes = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.tbContract = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.tbSlam = new System.Windows.Forms.TextBox();
+            this.tbDoubled = new System.Windows.Forms.TextBox();
+            this.tbUndertrick = new System.Windows.Forms.TextBox();
+            this.tbOvertrick = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tbTotal = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.btnMode = new System.Windows.Forms.CheckBox();
+            this.tbPartGame = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.grpboxContract.SuspendLayout();
             this.grpboxTrick.SuspendLayout();
             this.grpboxScore.SuspendLayout();
@@ -167,7 +172,11 @@
             this.grpboxScore.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpboxScore.Controls.Add(this.tbPartGame);
+            this.grpboxScore.Controls.Add(this.label8);
             this.grpboxScore.Controls.Add(this.tbTotal);
+            this.grpboxScore.Controls.Add(this.label7);
+            this.grpboxScore.Controls.Add(this.tbTotalPrimes);
             this.grpboxScore.Controls.Add(this.label6);
             this.grpboxScore.Controls.Add(this.tbSlam);
             this.grpboxScore.Controls.Add(this.label5);
@@ -181,19 +190,28 @@
             this.grpboxScore.Controls.Add(this.label1);
             this.grpboxScore.Location = new System.Drawing.Point(298, 12);
             this.grpboxScore.Name = "grpboxScore";
-            this.grpboxScore.Size = new System.Drawing.Size(358, 217);
+            this.grpboxScore.Size = new System.Drawing.Size(358, 304);
             this.grpboxScore.TabIndex = 7;
             this.grpboxScore.TabStop = false;
             this.grpboxScore.Text = "Score";
             // 
-            // label1
+            // tbTotalPrimes
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 22);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(41, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Contrat";
+            this.tbTotalPrimes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbTotalPrimes.Location = new System.Drawing.Point(130, 175);
+            this.tbTotalPrimes.Name = "tbTotalPrimes";
+            this.tbTotalPrimes.Size = new System.Drawing.Size(222, 20);
+            this.tbTotalPrimes.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 178);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(64, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Total primes";
             // 
             // tbContract
             // 
@@ -204,77 +222,14 @@
             this.tbContract.Size = new System.Drawing.Size(222, 20);
             this.tbContract.TabIndex = 1;
             // 
-            // tbOvertrick
+            // label1
             // 
-            this.tbOvertrick.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbOvertrick.Location = new System.Drawing.Point(130, 45);
-            this.tbOvertrick.Name = "tbOvertrick";
-            this.tbOvertrick.Size = new System.Drawing.Size(222, 20);
-            this.tbOvertrick.TabIndex = 3;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 48);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(50, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Overtrick";
-            // 
-            // tbUndertrick
-            // 
-            this.tbUndertrick.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbUndertrick.Location = new System.Drawing.Point(130, 71);
-            this.tbUndertrick.Name = "tbUndertrick";
-            this.tbUndertrick.Size = new System.Drawing.Size(222, 20);
-            this.tbUndertrick.TabIndex = 5;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(6, 74);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(56, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Undertrick";
-            // 
-            // tbDoubled
-            // 
-            this.tbDoubled.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbDoubled.Location = new System.Drawing.Point(130, 97);
-            this.tbDoubled.Name = "tbDoubled";
-            this.tbDoubled.Size = new System.Drawing.Size(222, 20);
-            this.tbDoubled.TabIndex = 7;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 100);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(47, 13);
-            this.label4.TabIndex = 6;
-            this.label4.Text = "Doubled";
-            // 
-            // tbSlam
-            // 
-            this.tbSlam.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbSlam.Location = new System.Drawing.Point(130, 123);
-            this.tbSlam.Name = "tbSlam";
-            this.tbSlam.Size = new System.Drawing.Size(222, 20);
-            this.tbSlam.TabIndex = 9;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 126);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(30, 13);
-            this.label5.TabIndex = 8;
-            this.label5.Text = "Slam";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 22);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(41, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Contrat";
             // 
             // button1
             // 
@@ -286,29 +241,132 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
+            // tbSlam
+            // 
+            this.tbSlam.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSlam.Location = new System.Drawing.Point(130, 123);
+            this.tbSlam.Name = "tbSlam";
+            this.tbSlam.Size = new System.Drawing.Size(222, 20);
+            this.tbSlam.TabIndex = 9;
+            // 
+            // tbDoubled
+            // 
+            this.tbDoubled.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbDoubled.Location = new System.Drawing.Point(130, 97);
+            this.tbDoubled.Name = "tbDoubled";
+            this.tbDoubled.Size = new System.Drawing.Size(222, 20);
+            this.tbDoubled.TabIndex = 7;
+            // 
+            // tbUndertrick
+            // 
+            this.tbUndertrick.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbUndertrick.Location = new System.Drawing.Point(130, 71);
+            this.tbUndertrick.Name = "tbUndertrick";
+            this.tbUndertrick.Size = new System.Drawing.Size(222, 20);
+            this.tbUndertrick.TabIndex = 5;
+            // 
+            // tbOvertrick
+            // 
+            this.tbOvertrick.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbOvertrick.Location = new System.Drawing.Point(130, 45);
+            this.tbOvertrick.Name = "tbOvertrick";
+            this.tbOvertrick.Size = new System.Drawing.Size(222, 20);
+            this.tbOvertrick.TabIndex = 3;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(6, 74);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(56, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Undertrick";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 100);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(47, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "Doubled";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 126);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(30, 13);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Slam";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 48);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(50, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Overtrick";
+            // 
             // tbTotal
             // 
             this.tbTotal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbTotal.Location = new System.Drawing.Point(130, 149);
+            this.tbTotal.Location = new System.Drawing.Point(130, 201);
             this.tbTotal.Name = "tbTotal";
             this.tbTotal.Size = new System.Drawing.Size(222, 20);
-            this.tbTotal.TabIndex = 11;
+            this.tbTotal.TabIndex = 13;
             // 
-            // label6
+            // label7
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(6, 152);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(31, 13);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Total";
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(6, 204);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(31, 13);
+            this.label7.TabIndex = 12;
+            this.label7.Text = "Total";
+            // 
+            // btnMode
+            // 
+            this.btnMode.Appearance = System.Windows.Forms.Appearance.Button;
+            this.btnMode.Location = new System.Drawing.Point(12, 145);
+            this.btnMode.Name = "btnMode";
+            this.btnMode.Size = new System.Drawing.Size(104, 24);
+            this.btnMode.TabIndex = 9;
+            this.btnMode.Text = "Mode : Duplicate";
+            this.btnMode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.btnMode.UseVisualStyleBackColor = true;
+            this.btnMode.CheckedChanged += new System.EventHandler(this.BtnMode_CheckedChanged);
+            // 
+            // tbPartGame
+            // 
+            this.tbPartGame.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbPartGame.Location = new System.Drawing.Point(130, 149);
+            this.tbPartGame.Name = "tbPartGame";
+            this.tbPartGame.Size = new System.Drawing.Size(222, 20);
+            this.tbPartGame.TabIndex = 15;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 152);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(55, 13);
+            this.label8.TabIndex = 14;
+            this.label8.Text = "Part game";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(668, 241);
+            this.ClientSize = new System.Drawing.Size(668, 328);
+            this.Controls.Add(this.btnMode);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.grpboxScore);
             this.Controls.Add(this.grpboxTrick);
@@ -344,6 +402,9 @@
         private System.Windows.Forms.GroupBox grpboxScore;
         private System.Windows.Forms.TextBox tbContract;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox tbTotalPrimes;
+        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox tbSlam;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbDoubled;
@@ -352,9 +413,11 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbOvertrick;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox tbTotal;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox btnMode;
+        private System.Windows.Forms.TextBox tbPartGame;
+        private System.Windows.Forms.Label label8;
     }
 }
 
